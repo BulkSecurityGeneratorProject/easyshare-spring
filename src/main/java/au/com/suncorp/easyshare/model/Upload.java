@@ -10,41 +10,35 @@
 
 package au.com.suncorp.easyshare.model;
 
-import org.springframework.data.annotation.Id;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.validator.constraints.Email;
-
 import javax.persistence.*;
 import org.hibernate.annotations.Type;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.joda.time.DateTime;
 
 @Entity
 @Table(name = "UPLOAD")
 public final class Upload {
 
     @Id
-    @Column(name = "id")
-    private int id;
+    @Column(name = "ID")
+    private String id;
 
+    @NotNull
     @Size(min = 18)
-    @Column(nullable = false)
+    @Column(name = "KEY")
     private String key;
 
     @NotNull
     @Size(min = 1, max = 320)
-    @Column(nullable = false)
+    @Column(name = "DESCRIPTION")
     private String description;
 
+    public Upload() {}
 
-    public Upload(String description) {
+    public Upload(String id, String description, String key) {
+        this.id = id;
         this.description = description;
+        this.key = key;
     }
 
     public String getKey() {

@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 public class EasyshareApplication {
 
     private SpringSwaggerConfig springSwaggerConfig;
+
     @Autowired
     public void setSpringSwaggerConfig(SpringSwaggerConfig springSwaggerConfig) {
         this.springSwaggerConfig = springSwaggerConfig;
