@@ -19,9 +19,4 @@ public final class RandomUtil {
     public static String generateString(int count) {
         return RandomStringUtils.randomAlphanumeric(count);
     }
-
-    public static String generateInt(int count) {
-        return RandomStringUtils.randomNumeric(count);
-    }
-
 }

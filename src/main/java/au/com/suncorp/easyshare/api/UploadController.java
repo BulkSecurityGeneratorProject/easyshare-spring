@@ -25,8 +25,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-import au.com.suncorp.easyshare.services.util.RandomUtil;
-
 import au.com.suncorp.easyshare.model.Upload;
 import au.com.suncorp.easyshare.repository.UploadRepository;
 
@@ -47,11 +45,9 @@ public final class UploadController {
 
     @RequestMapping(method = POST)
     public Upload createUpload() {
-        String key = RandomUtil.generateString(24);
-        String id = RandomUtil.generateInt(12);
         String description = "reece";
 
-        return repository.save(new Upload(id, description, key));
+        return repository.save(new Upload(description));
     }
 
     @RequestMapping(method = GET, value = "/{key}")

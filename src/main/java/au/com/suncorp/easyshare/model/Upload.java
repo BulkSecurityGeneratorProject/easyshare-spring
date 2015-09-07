@@ -15,18 +15,17 @@ import org.hibernate.annotations.Type;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import au.com.suncorp.easyshare.services.util.RandomUtil;
+
 @Entity
 @Table(name = "UPLOAD")
 public final class Upload {
 
     @Id
-    @Column(name = "ID")
-    private String id;
-
     @NotNull
     @Size(min = 18)
     @Column(name = "KEY")
-    private String key;
+    public String key;
 
     @NotNull
     @Size(min = 1, max = 320)
@@ -35,10 +34,9 @@ public final class Upload {
 
     public Upload() {}
 
-    public Upload(String id, String description, String key) {
-        this.id = id;
+    public Upload(String description) {
+        this.key = RandomUtil.generateString(32);
         this.description = description;
-        this.key = key;
     }
 
     public String getKey() {
