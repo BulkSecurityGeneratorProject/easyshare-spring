@@ -11,10 +11,9 @@
 package au.com.suncorp.easyshare.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import au.com.suncorp.easyshare.model.Upload;
+import au.com.suncorp.easyshare.model.FileMetadata;
 
-import java.util.List;
+public interface FileMetadataRepository extends JpaRepository<FileMetadata, String> {
 
-public interface UploadRepository extends JpaRepository<Upload, String> {
-    Upload findByKey(String name);
 }
+
