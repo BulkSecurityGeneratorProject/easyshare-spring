@@ -1,13 +1,3 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2015, Suncorp Metway Limited. All rights reserved.
-//
-// This is unpublished proprietary source code of Suncorp Metway Limited.
-// The copyright notice above does not evidence any actual or intended
-// publication of such source code.
-//
-////////////////////////////////////////////////////////////////////////////////
-
 package au.com.suncorp.easyshare.model;
 
 import javax.persistence.*;
@@ -51,5 +41,17 @@ public final class FileMetadata {
         this.filename = filename;
         this.contentType = contentType;
         this.contentLength = contentLength;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public long getContentLength() {
+        return contentLength;
     }
 }

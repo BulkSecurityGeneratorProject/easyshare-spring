@@ -9,7 +9,6 @@ import au.com.suncorp.easyshare.model.FileMetadata;
 
 import au.com.suncorp.easyshare.repository.FileMetadataRepository;
 import au.com.suncorp.easyshare.repository.UploadRepository;
-import au.com.suncorp.easyshare.services.util.RandomUtil;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
@@ -26,8 +25,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
-@RequestMapping("/api/upload/{key}/file")
-@Api(basePath = "/api/upload/file", value = "File", description = "FileMetadata API", produces = "application/json")
+@RequestMapping("/api/uploads/{key}/file")
+@Api(basePath = "/api/uploads/file", value = "File", description = "FileMetadata API", produces = "application/json")
 public class FileController {
 
     @Autowired

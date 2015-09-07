@@ -11,11 +11,15 @@
 package au.com.suncorp.easyshare.model;
 
 import javax.persistence.*;
+
 import org.hibernate.annotations.Type;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import au.com.suncorp.easyshare.services.util.RandomUtil;
+import org.joda.time.format.DateTimeFormat;
+
+import java.text.DateFormat;
 
 @Entity
 @Table(name = "UPLOAD")
@@ -41,10 +45,6 @@ public final class Upload {
 
     public String getKey() {
         return key;
-    }
-
-    public void getKey(String id) {
-        this.key = id;
     }
 
     public String getDescription() {

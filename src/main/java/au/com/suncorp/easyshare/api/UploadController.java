@@ -1,13 +1,3 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2015, Suncorp Metway Limited. All rights reserved.
-//
-// This is unpublished proprietary source code of Suncorp Metway Limited.
-// The copyright notice above does not evidence any actual or intended
-// publication of such source code.
-//
-////////////////////////////////////////////////////////////////////////////////
-
 package au.com.suncorp.easyshare.api;
 
 import java.util.List;
@@ -18,6 +8,7 @@ import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,34 +20,34 @@ import au.com.suncorp.easyshare.model.Upload;
 import au.com.suncorp.easyshare.repository.UploadRepository;
 
 @RestController
-@RequestMapping("/api/upload")
-@Api(basePath = "/api/upload", value = "Upload", description = "Upload api", produces = "application/json")
+@RequestMapping("/api/uploads")
+@Api(basePath = "/api/uploads", value = "Upload", description = "Upload api", produces = "application/json")
 public final class UploadController {
 
     @Autowired
-    private UploadRepository repository;
+    private UploadRepository uploadRepository;
 
     @RequestMapping(method = GET)
     @ApiOperation(value = "Get all uploads", notes = "Get all uploads")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "")})
     public List<Upload> getAllUploads() {
-        return repository.findAll();
+        return uploadRepository.findAll();
     }
 
     @RequestMapping(method = POST)
-    public Upload createUpload() {
-        String description = "reece";
+    public Upload createUpload(@RequestBody String description) {
+        String desc = "reece";
 
-        return repository.save(new Upload(description));
+        return uploadRepository.save(new Upload(desc));
     }
 
     @RequestMapping(method = GET, value = "/{key}")
     public Upload getUpload(@PathVariable String key) {
-        return repository.findByKey(key);
+        return uploadRepository.findByKey();
     }
 
     @RequestMapping(method = DELETE, value = "/{key}")
     public void deleteUpload(@PathVariable String key) {
-        repository.delete(key);
+        uploadRepository.delete(key);
     }
 }

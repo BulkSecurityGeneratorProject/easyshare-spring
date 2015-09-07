@@ -16,5 +16,5 @@ import au.com.suncorp.easyshare.model.Upload;
 import java.util.List;
 
 public interface UploadRepository extends JpaRepository<Upload, String> {
-    Upload findByKey(String name);
+    Upload findByKey();
 }
