@@ -3,12 +3,16 @@ package au.com.suncorp.easyshare.api;
 import java.util.List;
 import java.util.Optional;
 
+import au.com.suncorp.easyshare.api.dto.UploadDTO;
+import ch.qos.logback.core.db.dialect.SybaseSqlAnywhereDialect;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +25,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import au.com.suncorp.easyshare.model.Upload;
 import au.com.suncorp.easyshare.repository.UploadRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -39,8 +44,11 @@ public final class UploadController {
     }
 
     @RequestMapping(method = POST)
-    public Upload createUpload(@RequestBody @Valid Upload upload) {
-        return uploadRepository.save(upload);
+    public ResponseEntity<?> createUpload(@RequestBody @Valid UploadDTO body) {
+        System.out.println(body.getDescription());
+        Upload upload = uploadRepository.save(new Upload(body.getDescription()));
+
+        return new ResponseEntity<>(upload, HttpStatus.CREATED);
     }
 
     @RequestMapping(method = GET, value = "/{key}")
