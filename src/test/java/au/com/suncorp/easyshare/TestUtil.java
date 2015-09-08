@@ -2,9 +2,6 @@ package au.com.suncorp.easyshare;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
