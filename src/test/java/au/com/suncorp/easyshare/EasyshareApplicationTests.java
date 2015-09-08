@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class EasyshareApplicationTests {
 
 	@Test
+	@Ignore
 	public void contextLoads() {
 	}
 

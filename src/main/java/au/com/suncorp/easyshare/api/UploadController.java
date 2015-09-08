@@ -43,7 +43,8 @@ public final class UploadController {
 
     @RequestMapping(method = GET, value = "/{key}")
     public Upload getUpload(@PathVariable String key) {
-        return uploadRepository.findByKey();
+        System.out.println(key);
+        return uploadRepository.findByKey(key);
     }
 
     @RequestMapping(method = DELETE, value = "/{key}")
