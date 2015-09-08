@@ -36,11 +36,8 @@ public final class Upload {
     @Column(name = "DESCRIPTION")
     private String description;
 
-    public Upload() {}
-
-    public Upload(String description) {
+    public Upload() {
         this.key = RandomUtil.generateString(32);
-        this.description = description;
     }
 
     public String getKey() {

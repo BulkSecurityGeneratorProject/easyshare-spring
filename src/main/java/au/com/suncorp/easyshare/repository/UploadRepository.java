@@ -13,8 +13,6 @@ package au.com.suncorp.easyshare.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import au.com.suncorp.easyshare.model.Upload;
 
-import java.util.List;
-
 public interface UploadRepository extends JpaRepository<Upload, String> {
     Upload findByKey(String key);
 }
