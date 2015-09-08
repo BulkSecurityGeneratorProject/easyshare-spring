@@ -29,15 +29,17 @@ public final class Upload {
     @NotNull
     @Size(min = 18)
     @Column(name = "KEY")
-    public String key;
+    public String key = RandomUtil.generateString(32);
 
     @NotNull
     @Size(min = 1, max = 320)
     @Column(name = "DESCRIPTION")
     private String description;
 
-    public Upload() {
-        this.key = RandomUtil.generateString(32);
+    public Upload() { }
+
+    public Upload(String description) {
+        this.description = description;
     }
 
     public String getKey() {
