@@ -30,4 +30,19 @@ public class TestUtil {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         return mapper.writeValueAsBytes(object);
     }
+
+    /**
+     * Create a byte array with a specific size filled with specified data
+     *
+     * @param size
+     * @param data
+     * @return
+     */
+    public static byte[] createByteArray(int size, String data) {
+        byte[] byteArray = new byte[size];
+        for (int i = 0; i < size; i++) {
+            byteArray[i] = Byte.parseByte(data, 2);
+        }
+        return byteArray;
+    }
 }
