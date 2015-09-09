@@ -43,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringApplicationConfiguration(classes = EasyshareApplication.class)
 @WebAppConfiguration
 @IntegrationTest
-public class UploadResourceTest {
+public class UploadControllerTest {
 
     @Autowired
     private UploadRepository uploadRepository;
