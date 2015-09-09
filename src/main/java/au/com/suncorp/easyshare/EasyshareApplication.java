@@ -19,6 +19,7 @@ public class EasyshareApplication {
     public void setSpringSwaggerConfig(SpringSwaggerConfig springSwaggerConfig) {
         this.springSwaggerConfig = springSwaggerConfig;
     }
+
     @Bean
             // Don't forget the @Bean annotation
     public SwaggerSpringMvcPlugin customImplementation() {
