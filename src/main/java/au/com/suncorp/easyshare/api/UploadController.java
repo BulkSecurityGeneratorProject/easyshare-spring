@@ -36,14 +36,14 @@ public final class UploadController {
     @Autowired
     private UploadRepository uploadRepository;
 
-    @RequestMapping(method = GET)
+    @RequestMapping(method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Get all uploads", notes = "Get all uploads")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "")})
     public List<Upload> getAllUploads() {
         return uploadRepository.findAll();
     }
 
-    @RequestMapping(method = POST)
+    @RequestMapping(method = POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createUpload(@RequestBody @Valid UploadDTO body) {
         System.out.println(body.getDescription());
         Upload upload = uploadRepository.save(new Upload(body.getDescription()));
@@ -51,9 +51,17 @@ public final class UploadController {
         return new ResponseEntity<>(upload, HttpStatus.CREATED);
     }
 
-    @RequestMapping(method = GET, value = "/{key}")
-    public Upload getUpload(@PathVariable String key) {
-        return uploadRepository.findByKey(key);
+    @RequestMapping(method = GET,
+            value = "/{key}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Upload> getUpload(@PathVariable String key) {
+        Upload upload = uploadRepository.findByKey(key);
+
+        if (upload == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(upload, HttpStatus.OK);
     }
 
     @RequestMapping(method = DELETE, value = "/{key}")

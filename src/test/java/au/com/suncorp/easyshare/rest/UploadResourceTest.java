@@ -3,6 +3,7 @@ package au.com.suncorp.easyshare.rest;
 import au.com.suncorp.easyshare.EasyshareApplication;
 import au.com.suncorp.easyshare.TestUtil;
 import au.com.suncorp.easyshare.api.UploadController;
+import au.com.suncorp.easyshare.api.dto.UploadDTO;
 import au.com.suncorp.easyshare.model.Upload;
 import au.com.suncorp.easyshare.repository.UploadRepository;
 
@@ -21,6 +22,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import javax.transaction.Transactional;
 
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
@@ -53,44 +56,46 @@ public class UploadResourceTest {
     @Before
     public void setup() {
         UploadController uploadController = new UploadController();
-        ReflectionTestUtils.setField(uploadController, "uploadRepository", mockUploadRepository);
+        ReflectionTestUtils.setField(uploadController, "uploadRepository", uploadRepository);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(uploadController).build();
     }
 
     @Test
     public void testCreateNewUpload() throws Exception {
-        String description = "New upload containing my documents";
-        
-        restUserMockMvc.perform(post("/api/uploads")
-                .content(TestUtil.convertObjectToJsonBytes(description))
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+        UploadDTO upload = new UploadDTO("New upload for some files");
+
+        restUserMockMvc.perform(
+                post("/api/uploads")
+                .content(TestUtil.convertObjectToJsonBytes(upload))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.key").exists())
                 .andExpect(jsonPath("$.description").exists());
     }
 
-    @Ignore
     @Test
     public void testGetUploadDetails() throws Exception {
-        Upload upload = new Upload("description");
+        Upload upload = new Upload();
+        upload.setDescription("description");
+
+        uploadRepository.save(upload); // TODO - Mock this
+
         String uploadKey = upload.getKey();
 
-        when(mockUploadRepository.findByKey(uploadKey)).thenReturn(upload);
-
-        restUserMockMvc.perform(get("/api/uploads/" + uploadKey)
-                .accept(MediaType.APPLICATION_JSON))
+        restUserMockMvc
+                .perform(
+                        get("/api/uploads/" + uploadKey)
+                                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.key").exists());
     }
 
     @Test
-    @Ignore
     public void testUnkownUpload() throws Exception {
         restUserMockMvc.perform(get("/api/uploads/thisBetterNotExist")
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(content().contentType("application/json"))
                 .andExpect(status().isNotFound());
     }
 }
