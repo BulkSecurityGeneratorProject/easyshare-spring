@@ -2,6 +2,7 @@ package au.com.suncorp.easyshare.rest;
 
 import au.com.suncorp.easyshare.EasyshareApplication;
 import au.com.suncorp.easyshare.TestUtil;
+import au.com.suncorp.easyshare.api.FileController;
 import au.com.suncorp.easyshare.api.UploadController;
 import au.com.suncorp.easyshare.api.dto.UploadDTO;
 import au.com.suncorp.easyshare.model.Upload;
@@ -16,10 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -47,14 +50,31 @@ public class FileUploadControllerTest {
 
     @Autowired
     private UploadRepository uploadRepository;
-
-    @Autowired
+    
     private MockMvc restFileMockMvc;
 
+    @Before
+    public void setup() throws Exception {
+        FileController fileController= new FileController();
+        ReflectionTestUtils.setField(fileController, "uploadRepository", uploadRepository);
+        this.restFileMockMvc = MockMvcBuilders.standaloneSetup(fileController).build();
+    }
+
     @Test
-    private void testFileUpload() {
+    public void testFileUpload() throws Exception{
+        MockMultipartFile mockFile = new MockMultipartFile("data", "filename.txt", "text/plain", "some xml".getBytes());
+
         Upload upload = uploadRepository.save(new Upload("Decsription"));
+        String key = upload.getKey();
 
-
+        restFileMockMvc
+                .perform(MockMvcRequestBuilders.fileUpload("/api/upload/" + key + "/file")
+                    .file(mockFile))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.upload").exists())
+                .andExpect(jsonPath("$.ID").exists())
+                .andExpect(jsonPath("$.filename").exists())
+                .andExpect(jsonPath("$.contentType").exists())
+                .andExpect(jsonPath("$.length").exists());
     }
 }
