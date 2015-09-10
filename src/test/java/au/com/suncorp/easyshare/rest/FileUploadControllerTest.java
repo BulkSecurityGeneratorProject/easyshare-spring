@@ -18,6 +18,7 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.mock.web.MockMultipartHttpServletRequest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -35,6 +36,7 @@ import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -50,7 +52,7 @@ public class FileUploadControllerTest {
 
     @Autowired
     private UploadRepository uploadRepository;
-    
+
     private MockMvc restFileMockMvc;
 
     @Before
@@ -62,19 +64,30 @@ public class FileUploadControllerTest {
 
     @Test
     public void testFileUpload() throws Exception{
-        MockMultipartFile mockFile = new MockMultipartFile("data", "filename.txt", "text/plain", "some xml".getBytes());
+        MockMultipartFile mockFile = new MockMultipartFile("data", "DATADATADATDATADATA".getBytes());
 
-        Upload upload = uploadRepository.save(new Upload("Decsription"));
+        Upload upload = uploadRepository.save(new Upload("Description"));
         String key = upload.getKey();
 
         restFileMockMvc
-                .perform(MockMvcRequestBuilders.fileUpload("/api/upload/" + key + "/file")
-                    .file(mockFile))
+                .perform(fileUpload("/api/uploads/" + key + "/file")
+                    .file(mockFile)
+                        .param("name", "xyz")
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.upload").exists())
                 .andExpect(jsonPath("$.ID").exists())
                 .andExpect(jsonPath("$.filename").exists())
                 .andExpect(jsonPath("$.contentType").exists())
                 .andExpect(jsonPath("$.length").exists());
+    }
+
+    @Test
+    public void testMissingFileUpload() throws Exception{
+        String key = "shouldntNeedAKey";
+
+        restFileMockMvc
+                .perform(fileUpload("/api/uploads/" + key + "/file"))
+                .andExpect(status().isBadRequest());
     }
 }
