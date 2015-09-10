@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,7 +39,7 @@ public class FileController {
     @RequestMapping(method = POST)
     @ApiOperation(value = "Multipart file upload", notes = "Upload a file to an ID")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "") })
-    public @ResponseBody String uploadFile(MultipartFile file, @RequestParam("name") String name, @PathVariable String key) {
+    public @ResponseBody String uploadFile(@RequestParam("file") MultipartFile file, @PathVariable String key) {
 
         // Check that upload exists
         // Store File
@@ -51,7 +52,10 @@ public class FileController {
             return "No matching upload found";
         }
 
-        if (file.isEmpty()) return "false";
+        if (file == null || file.isEmpty()) {
+            System.out.println("##### \n Null file \n #####");
+            return "false";
+        }
 
         // Record file metadata
         UUID fileID = UUID.randomUUID();
@@ -66,7 +70,7 @@ public class FileController {
             stream.write(bytes);
             stream.close();
         } catch (Exception e) {
-            return "You failed to upload " + name + " => " + e.getMessage();
+            return "You failed to upload " + upload.getKey() + " => " + e.getMessage();
         }
 
         FileMetadata metadata = new FileMetadata(fileID, filename, contentType, contentLength);
